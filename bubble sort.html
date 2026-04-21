@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Advanced Bubble Sort Challenge</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background: linear-gradient(to right, #0f172a, #1e293b);
+      color: white;
+      min-height: 100vh;
+      padding: 30px;
+      text-align: center;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: auto;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 20px;
+      padding: 30px;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+    }
+
+    .subtitle {
+      color: #cbd5e1;
+      margin-bottom: 25px;
+    }
+
+    .top-panel {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin-bottom: 30px;
+    }
+
+    .card {
+      background: rgba(255,255,255,0.08);
+      padding: 14px 22px;
+      border-radius: 14px;
+      min-width: 170px;
+      font-weight: bold;
+    }
+
+    #bars {
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      gap: 12px;
+      height: 400px;
+      padding: 20px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      margin-bottom: 30px;
+    }
+
+    .bar {
+      width: 60px;
+      background: #64748b;
+      border-radius: 10px 10px 0 0;
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+      padding-bottom: 10px;
+      font-weight: bold;
+      transition: 0.3s;
+    }
+
+    .highlight {
+      background: #a855f7;
+      transform: scale(1.03);
+      box-shadow: 0 0 15px rgba(168,85,247,0.5);
+    }
+
+    .buttons {
+      margin-top: 20px;
+    }
+
+    button {
+      padding: 12px 28px;
+      margin: 10px;
+      border: none;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .yes {
+      background: #22c55e;
+      color: white;
+    }
+
+    .no {
+      background: #ef4444;
+      color: white;
+    }
+
+    .start {
+      background: #3b82f6;
+      color: white;
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+    }
+
+    #message {
+      margin-top: 20px;
+      font-size: 18px;
+      font-weight: bold;
+      color: #f8fafc;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h1>Bubble Sort Challenge</h1>
+  <p class="subtitle">Decide if the highlighted numbers should be swapped</p>
+
+  <div class="top-panel">
+    <div class="card">⏱ Time: <span id="timer">0</span>s</div>
+    <div class="card">🏆 Best Score: <span id="best">0</span>s</div>
+    <div class="card">🎯 Level: Standard</div>
+  </div>
+
+  <div id="bars"></div>
+
+  <button class="start" onclick="startGame()">Start Game</button>
+
+  <div class="buttons">
+    <button class="yes" onclick="checkAnswer(true)">YES</button>
+    <button class="no" onclick="checkAnswer(false)">NO</button>
+  </div>
+
+  <p id="message">Click Start Game</p>
+</div>
+
+<script>
+let numbers = [];
+let currentIndex = 0;
+let swappedInPass = false;
+let timer = 0;
+let interval;
+
+const bars = document.getElementById("bars");
+const timerText = document.getElementById("timer");
+const bestText = document.getElementById("best");
+const message = document.getElementById("message");
+
+let bestScore = localStorage.getItem("bestBubbleScore") || 0;
+bestText.textContent = bestScore;
+
+function randomNumbers() {
+  numbers = [];
+  for (let i = 0; i < 10; i++) {
+    numbers.push(Math.floor(Math.random() * 90) + 10);
+  }
+}
+
+function renderBars() {
+  bars.innerHTML = "";
+
+  numbers.forEach((num, index) => {
+    const bar = document.createElement("div");
+    bar.classList.add("bar");
+
+    if (index === currentIndex || index === currentIndex + 1) {
+      bar.classList.add("highlight");
+    }
+
+    bar.style.height = `${num * 3}px`;
+    bar.textContent = num;
+    bars.appendChild(bar);
+  });
+}
+
+function startGame() {
+  clearInterval(interval);
+  timer = 0;
+  timerText.textContent = timer;
+  currentIndex = 0;
+  swappedInPass = false;
+
+  randomNumbers();
+  renderBars();
+
+  interval = setInterval(() => {
+    timer++;
+    timerText.textContent = timer;
+  }, 1000);
+
+  message.textContent = "Game Started!";
+}
+
+function checkAnswer(choice) {
+  if (numbers.length === 0) return;
+
+  let a = numbers[currentIndex];
+  let b = numbers[currentIndex + 1];
+  let shouldSwap = a > b;
+
+  if (choice === shouldSwap) {
+    if (shouldSwap) {
+      [numbers[currentIndex], numbers[currentIndex + 1]] =
+      [numbers[currentIndex + 1], numbers[currentIndex]];
+      swappedInPass = true;
+    }
+    message.textContent = "Correct move";
+  } else {
+    timer += 2;
+    timerText.textContent = timer;
+    message.textContent = "Wrong move (+2s penalty)";
+  }
+
+  currentIndex++;
+
+  if (currentIndex >= numbers.length - 1) {
+    if (!swappedInPass) {
+      clearInterval(interval);
+      message.textContent = `Finished in ${timer}s!`;
+
+      if (bestScore == 0 || timer < bestScore) {
+        bestScore = timer;
+        localStorage.setItem("bestBubbleScore", bestScore);
+        bestText.textContent = bestScore;
+        message.textContent += " New Best Score!";
+      }
+
+      renderBars();
+      return;
+    }
+
+    currentIndex = 0;
+    swappedInPass = false;
+    message.textContent = "Next pass started";
+  }
+
+  renderBars();
+}
+</script>
+
+</body>
+</html>
