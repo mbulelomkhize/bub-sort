@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Advanced Bubble Sort Challenge</title>
+
   <style>
     * {
       margin: 0;
@@ -88,10 +89,6 @@
       box-shadow: 0 0 15px rgba(168,85,247,0.5);
     }
 
-    .buttons {
-      margin-top: 20px;
-    }
-
     button {
       padding: 12px 28px;
       margin: 10px;
@@ -100,36 +97,20 @@
       font-size: 16px;
       font-weight: bold;
       cursor: pointer;
-      transition: 0.2s;
     }
 
-    .yes {
-      background: #22c55e;
-      color: white;
-    }
-
-    .no {
-      background: #ef4444;
-      color: white;
-    }
-
-    .start {
-      background: #3b82f6;
-      color: white;
-    }
-
-    button:hover {
-      transform: translateY(-2px);
-    }
+    .yes { background: #22c55e; color: white; }
+    .no { background: #ef4444; color: white; }
+    .start { background: #3b82f6; color: white; }
 
     #message {
       margin-top: 20px;
       font-size: 18px;
       font-weight: bold;
-      color: #f8fafc;
     }
   </style>
 </head>
+
 <body>
 
 <div class="container">
@@ -146,7 +127,7 @@
 
   <button class="start" onclick="startGame()">Start Game</button>
 
-  <div class="buttons">
+  <div>
     <button class="yes" onclick="checkAnswer(true)">YES</button>
     <button class="no" onclick="checkAnswer(false)">NO</button>
   </div>
@@ -160,6 +141,12 @@ let currentIndex = 0;
 let swappedInPass = false;
 let timer = 0;
 let interval;
+
+// 🔊 SOUND FIX (ADDED HERE)
+const correctSound = new Audio("correct.mp3");
+const wrongSound = new Audio("wrong.mp3");
+const startSound = new Audio("start.mp3");
+const finishSound = new Audio("finish.mp3");
 
 const bars = document.getElementById("bars");
 const timerText = document.getElementById("timer");
@@ -195,6 +182,7 @@ function renderBars() {
 
 function startGame() {
   clearInterval(interval);
+
   timer = 0;
   timerText.textContent = timer;
   currentIndex = 0;
@@ -209,6 +197,10 @@ function startGame() {
   }, 1000);
 
   message.textContent = "Game Started!";
+
+  // 🔊 START SOUND
+  startSound.currentTime = 0;
+  startSound.play();
 }
 
 function checkAnswer(choice) {
@@ -219,24 +211,41 @@ function checkAnswer(choice) {
   let shouldSwap = a > b;
 
   if (choice === shouldSwap) {
+
     if (shouldSwap) {
       [numbers[currentIndex], numbers[currentIndex + 1]] =
       [numbers[currentIndex + 1], numbers[currentIndex]];
       swappedInPass = true;
     }
+
     message.textContent = "Correct move";
+
+    // 🔊 CORRECT SOUND
+    correctSound.currentTime = 0;
+    correctSound.play();
+
   } else {
     timer += 2;
     timerText.textContent = timer;
     message.textContent = "Wrong move (+2s penalty)";
+
+    // 🔊 WRONG SOUND
+    wrongSound.currentTime = 0;
+    wrongSound.play();
   }
 
   currentIndex++;
 
   if (currentIndex >= numbers.length - 1) {
+
     if (!swappedInPass) {
       clearInterval(interval);
+
       message.textContent = `Finished in ${timer}s!`;
+
+      // 🔊 FINISH SOUND
+      finishSound.currentTime = 0;
+      finishSound.play();
 
       if (bestScore == 0 || timer < bestScore) {
         bestScore = timer;
