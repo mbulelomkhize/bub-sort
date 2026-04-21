@@ -81,16 +81,14 @@ function checkAnswer(choice) {
     }
 
     message.textContent = "Correct move";
-correctSound.currentTime = 0;
-correctSound.play();
+    new Audio("correct.mp3").play();
   }
   
   else {
     timer += 2;
     timerText.textContent = timer;
     message.textContent = "Wrong move (+2s penalty)";
-wrongSound.currentTime = 0;
-wrongSound.play();
+    new Audio("wrong.mp3").play();
   }
 
   currentIndex++;
@@ -100,8 +98,7 @@ wrongSound.play();
       clearInterval(interval);
 
       message.textContent = `Finished in ${timer}s!`;
-finishSound.currentTime = 0;
-finishSound.play();
+      new Audio("finish.mp3").play();
 
       if (bestScore == 0 || timer < bestScore) {
         bestScore = timer;
