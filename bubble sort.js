@@ -4,7 +4,7 @@ let swappedInPass = false;
 let timer = 0;
 let interval;
 
-// SOUND EFFECTS
+// 🔊 FIX 1: SOUND OBJECTS (OK, KEEP THESE)
 const correctSound = new Audio("correct.mp3");
 const wrongSound = new Audio("wrong.mp3");
 const startSound = new Audio("start.mp3");
@@ -62,6 +62,9 @@ function startGame() {
   }, 1000);
 
   message.textContent = "Game Started!";
+
+  // 🔊 FIX 2: START SOUND FIXED
+  startSound.currentTime = 0;   // reset sound so it can replay
   startSound.play();
 }
 
@@ -73,32 +76,41 @@ function checkAnswer(choice) {
   let shouldSwap = a > b;
 
   if (choice === shouldSwap) {
+
     if (shouldSwap) {
       [numbers[currentIndex], numbers[currentIndex + 1]] =
       [numbers[currentIndex + 1], numbers[currentIndex]];
-
       swappedInPass = true;
     }
 
     message.textContent = "Correct move";
-    new Audio("correct.mp3").play();
-  }
-  
-  else {
+
+    // 🔊 FIX 3: CORRECT SOUND FIXED
+    correctSound.currentTime = 0;
+    correctSound.play();
+
+  } else {
     timer += 2;
     timerText.textContent = timer;
     message.textContent = "Wrong move (+2s penalty)";
-    new Audio("wrong.mp3").play();
+
+    // 🔊 FIX 4: WRONG SOUND FIXED
+    wrongSound.currentTime = 0;
+    wrongSound.play();
   }
 
   currentIndex++;
 
   if (currentIndex >= numbers.length - 1) {
+
     if (!swappedInPass) {
       clearInterval(interval);
 
       message.textContent = `Finished in ${timer}s!`;
-      new Audio("finish.mp3").play();
+
+      // 🔊 FIX 5: FINISH SOUND FIXED
+      finishSound.currentTime = 0;
+      finishSound.play();
 
       if (bestScore == 0 || timer < bestScore) {
         bestScore = timer;
@@ -119,4 +131,6 @@ function checkAnswer(choice) {
   renderBars();
 }
 
-startGame();
+/*  FIX 6 (IMPORTANT - NOT IN JS LOGIC BUT MUST REMOVE IF YOU HAD IT) */
+//  REMOVE THIS IF YOU HAD IT:
+// startGame();
