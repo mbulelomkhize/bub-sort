@@ -4,6 +4,12 @@ let swappedInPass = false;
 let timer = 0;
 let interval;
 
+// SOUND EFFECTS
+const correctSound = new Audio("correct.mp3");
+const wrongSound = new Audio("wrong.mp3");
+const startSound = new Audio("start.mp3");
+const finishSound = new Audio("finish.mp3");
+
 const bars = document.getElementById("bars");
 const timerText = document.getElementById("timer");
 const bestText = document.getElementById("best");
@@ -56,6 +62,7 @@ function startGame() {
   }, 1000);
 
   message.textContent = "Game Started!";
+  startSound.play();
 }
 
 function checkAnswer(choice) {
@@ -74,10 +81,12 @@ function checkAnswer(choice) {
     }
 
     message.textContent = "Correct move";
+    correctSound.play();
   } else {
     timer += 2;
     timerText.textContent = timer;
     message.textContent = "Wrong move (+2s penalty)";
+    wrongSound.play();
   }
 
   currentIndex++;
@@ -87,6 +96,7 @@ function checkAnswer(choice) {
       clearInterval(interval);
 
       message.textContent = `Finished in ${timer}s!`;
+      finishSound.play();
 
       if (bestScore == 0 || timer < bestScore) {
         bestScore = timer;
