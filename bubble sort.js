@@ -4,7 +4,6 @@ let swappedInPass = false;
 let timer = 0;
 let interval;
 
-// 🔊 FIX 1: SOUND OBJECTS (OK, KEEP THESE)
 const correctSound = new Audio("correct.mp3");
 const wrongSound = new Audio("wrong.mp3");
 const startSound = new Audio("start.mp3");
@@ -63,7 +62,6 @@ function startGame() {
 
   message.textContent = "Game Started!";
 
-  // 🔊 FIX 2: START SOUND FIXED
   startSound.currentTime = 0;   // reset sound so it can replay
   startSound.play();
 }
@@ -85,7 +83,6 @@ function checkAnswer(choice) {
 
     message.textContent = "Correct move";
 
-    // 🔊 FIX 3: CORRECT SOUND FIXED
     correctSound.currentTime = 0;
     correctSound.play();
 
@@ -94,7 +91,6 @@ function checkAnswer(choice) {
     timerText.textContent = timer;
     message.textContent = "Wrong move (+2s penalty)";
 
-    // 🔊 FIX 4: WRONG SOUND FIXED
     wrongSound.currentTime = 0;
     wrongSound.play();
   }
@@ -108,7 +104,6 @@ function checkAnswer(choice) {
 
       message.textContent = `Finished in ${timer}s!`;
 
-      // 🔊 FIX 5: FINISH SOUND FIXED
       finishSound.currentTime = 0;
       finishSound.play();
 
@@ -131,6 +126,3 @@ function checkAnswer(choice) {
   renderBars();
 }
 
-/*  FIX 6 (IMPORTANT - NOT IN JS LOGIC BUT MUST REMOVE IF YOU HAD IT) */
-//  REMOVE THIS IF YOU HAD IT:
-// startGame();
