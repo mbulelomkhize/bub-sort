@@ -142,7 +142,6 @@ let swappedInPass = false;
 let timer = 0;
 let interval;
 
-// 🔊 SOUND FIX (ADDED HERE)
 const correctSound = new Audio("correct.mp3");
 const wrongSound = new Audio("wrong.mp3");
 const startSound = new Audio("start.mp3");
@@ -198,7 +197,6 @@ function startGame() {
 
   message.textContent = "Game Started!";
 
-  // 🔊 START SOUND
   startSound.currentTime = 0;
   startSound.play();
 }
@@ -220,7 +218,6 @@ function checkAnswer(choice) {
 
     message.textContent = "Correct move";
 
-    // 🔊 CORRECT SOUND
     correctSound.currentTime = 0;
     correctSound.play();
 
@@ -229,7 +226,6 @@ function checkAnswer(choice) {
     timerText.textContent = timer;
     message.textContent = "Wrong move (+2s penalty)";
 
-    // 🔊 WRONG SOUND
     wrongSound.currentTime = 0;
     wrongSound.play();
   }
@@ -243,7 +239,6 @@ function checkAnswer(choice) {
 
       message.textContent = `Finished in ${timer}s!`;
 
-      // 🔊 FINISH SOUND
       finishSound.currentTime = 0;
       finishSound.play();
 
